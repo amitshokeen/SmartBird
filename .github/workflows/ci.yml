@@ -39,3 +39,5 @@ jobs:
           allure_results: allure-results
           gh_pages: gh-pages
           keep_reports: 20
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
