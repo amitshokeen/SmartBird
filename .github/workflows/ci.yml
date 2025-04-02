@@ -1,4 +1,4 @@
-name: Java CI with Allure Report (GitHub Pages)
+name: Java CI with Allure Report (manual push to gh-pages)
 
 on:
   push:
@@ -23,11 +23,14 @@ jobs:
       - name: Build and run tests
         run: mvn clean test
 
-      - name: Install Allure CLI
+      - name: Install Allure CLI via Linuxbrew
         run: |
-          curl -o allure.tgz -L https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
-          tar -xzf allure.tgz
-          sudo mv allure-2.27.0/bin/allure /usr/local/bin/allure
+          sudo apt update
+          sudo apt install build-essential procps curl file git -y
+          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $GITHUB_ENV
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          brew install allure
 
       - name: Generate Allure report
         run: |
