@@ -22,23 +22,11 @@ jobs:
       - name: Run tests
         run: mvn clean test
 
-      - name: Install Allure CLI via Linuxbrew
+      - name: Install Allure CLI (pre-installed Homebrew path)
         shell: bash
         run: |
-          # Check if brew is already installed
-          if ! command -v brew &> /dev/null; then
-            echo "Installing Homebrew..."
-            git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew
-            mkdir -p /home/linuxbrew/.linuxbrew/bin
-            ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin
-            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-            echo "eval \"$($(brew --prefix)/bin/brew shellenv)\"" >> $GITHUB_ENV
-          else
-            echo "Homebrew already installed"
-            echo "eval \"$($(brew --prefix)/bin/brew shellenv)\"" >> $GITHUB_ENV
-          fi
-
-          source $GITHUB_ENV
+          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> ~/.bash_profile
+          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
           brew install allure
 
       - name: Generate Allure report
