@@ -32,12 +32,10 @@ jobs:
       - name: Build and test with Maven
         run: mvn clean test
 
-      - name: Install Allure CLI
-        run: |
-          curl -o allure.tgz -L https://github.com/allure-framework/allure2/releases/download/2.27.0/allure-2.27.0.tgz
-          tar -xzf allure.tgz
-          sudo mv allure-2.27.0/bin/allure /usr/local/bin/allure
-          allure --version
+      - name: Set up Allure CLI
+        uses: simple-elf/allure-report-action@v1.8
+        with:
+          allure-version: 2.27.0
 
       - name: Generate Allure Report
         run: |
