@@ -7,33 +7,37 @@ on:
     branches: [ master ]
 
 jobs:
-  test-and-publish:
+  test-and-report:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Java
+      - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Build and run tests
+      - name: Run tests
         run: mvn clean test
 
       - name: Install Allure CLI via Linuxbrew
+        shell: bash
         run: |
-          sudo apt update
-          sudo apt install build-essential procps curl file git -y
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> $GITHUB_ENV
+          sudo apt-get update
+          sudo apt-get install -y build-essential curl file git
+          git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew
+          mkdir -p /home/linuxbrew/.linuxbrew/bin
+          ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin
           eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+          echo "eval \"$($(brew --prefix)/bin/brew shellenv)\"" >> $GITHUB_ENV
           brew install allure
 
       - name: Generate Allure report
+        shell: bash
         run: |
+          source $GITHUB_ENV
           allure generate target/allure-results --clean -o allure-report
 
       - name: Deploy Allure report to GitHub Pages
