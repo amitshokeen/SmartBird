@@ -1,17 +1,17 @@
-name: Java CI with Allure
+name: Java CI with Allure Report (GitHub Pages)
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
-  build:
+  test-and-report:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout source code
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
@@ -20,27 +20,22 @@ jobs:
           distribution: 'temurin'
           java-version: '21'
 
-      - name: Cache Maven packages
+      - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
-          path: |
-            ~/.m2/repository
+          path: ~/.m2/repository
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-          restore-keys: |
-            ${{ runner.os }}-maven-
+          restore-keys: ${{ runner.os }}-maven
 
-      - name: Build and test with Maven
+      - name: Build and run tests
         run: mvn clean test
 
-      - name: Generate Allure Report
+      - name: Copy Allure results to root
+        run: cp -r target/allure-results .
+
+      - name: Publish Allure Report to GitHub Pages
         uses: simple-elf/allure-report-action@v1.8
         with:
-          allure-version: 2.27.0
-          results-directory: target/allure-results
-          report-directory: target/allure-report
-      
-      - name: Upload Allure Report as Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: allure-report
-          path: target/allure-report
+          allure_results: allure-results
+          gh_pages: gh-pages
+          keep_reports: 20
