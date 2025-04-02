@@ -31,7 +31,7 @@ jobs:
         run: mvn clean test
 
       - name: Publish Allure Report to GitHub Pages
-        uses: allure-actions/allure-report@v2.0.0
+        uses: allure-actions/allure-report@v1.7.0
         with:
           results_dir: target/allure-results
           report_dir: target/allure-report
