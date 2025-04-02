@@ -25,13 +25,20 @@ jobs:
       - name: Install Allure CLI via Linuxbrew
         shell: bash
         run: |
-          sudo apt-get update
-          sudo apt-get install -y build-essential curl file git
-          git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew
-          mkdir -p /home/linuxbrew/.linuxbrew/bin
-          ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin
-          eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-          echo "eval \"$($(brew --prefix)/bin/brew shellenv)\"" >> $GITHUB_ENV
+          # Check if brew is already installed
+          if ! command -v brew &> /dev/null; then
+            echo "Installing Homebrew..."
+            git clone https://github.com/Homebrew/brew /home/linuxbrew/.linuxbrew/Homebrew
+            mkdir -p /home/linuxbrew/.linuxbrew/bin
+            ln -s /home/linuxbrew/.linuxbrew/Homebrew/bin/brew /home/linuxbrew/.linuxbrew/bin
+            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+            echo "eval \"$($(brew --prefix)/bin/brew shellenv)\"" >> $GITHUB_ENV
+          else
+            echo "Homebrew already installed"
+            echo "eval \"$($(brew --prefix)/bin/brew shellenv)\"" >> $GITHUB_ENV
+          fi
+
+          source $GITHUB_ENV
           brew install allure
 
       - name: Generate Allure report
