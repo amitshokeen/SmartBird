@@ -1,0 +1,1 @@
+{"total":2,"items":[{"uid":"3bfaabc5d0db3d5e9ac362d486695dd9","name":"com.chef.ChefAppTest","statistic":{"failed":0,"broken":0,"skipped":0,"passed":3,"unknown":0,"total":3}},{"uid":"5c107f182a4d688dff887bb405d5dd9c","name":"com.example.AppTest","statistic":{"failed":0,"broken":0,"skipped":0,"passed":1,"unknown":0,"total":1}}]}
