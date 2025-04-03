@@ -6,5 +6,6 @@
 * Allure reports have been configured to provide a test run report.
 * Build automation is done using Maven. 
 * Go through the pom.xml in the root
+* To make sure Maven downloads all dependencies: `mvn clean install`
 * To Build and test on local terminal: `mvn clean test`
 * .github/workflows/ci.yml > Github Actions > after you push your changes onto the repo, it will generate a report and publish the test results allure report here: https://amitshokeen.github.io/SmartBird/  
